@@ -6,6 +6,6 @@ services:
     volumes:
       - ./server:/app
     ports:
-      - "127.0.0.1:5000:5000"
+      - "127.0.0.1:8000:8000"
     # uncomment for debugging the service - container does not try to start dev server
     #entrypoint: ["sh", "-c", "sleep infinity"]

@@ -2,10 +2,11 @@ FROM python:alpine3.7
 COPY . /app
 WORKDIR /app
 RUN pip install -r requirements.txt
-EXPOSE 5000
+EXPOSE 8000
 ENV FLASK_RUN_HOST 0.0.0.0
 ENV FLASK_ENV=development
+ENV PORT=8000
 # RUN cd server
 # CMD python ./index.py
 CMD ["flask", "run"]
-# CMD ["gunicorn", "--bind", "0.0.0.0:5000", "wsgi"]
+# CMD ["gunicorn", "--bind", "0.0.0.0:8000", "wsgi"]
