@@ -8,5 +8,5 @@ ENV FLASK_ENV=development
 ENV PORT=8000
 # RUN cd server
 # CMD python ./index.py
-CMD ["flask", "run"]
+CMD ["flask", "run", "--host", "0.0.0.0", "--port", "8000"]
 # CMD ["gunicorn", "--bind", "0.0.0.0:8000", "wsgi"]
