@@ -1,10 +1,20 @@
 <!-- templates/index.html -->
+<!doctype html>
 <html>
-  <head>
-    <title>Pythondo</title>
-    <script src="/static/main.js" charset="utf-8"></script>
-  </head>
-  <body>
-    <h1>{{message}}</h1>
-  </body>
+<head>
+	<meta charset='utf8'>
+	<meta name='viewport' content='width=device-width'>
+	<title>Pythondo</title>
+	<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/pure-min.css" integrity="sha384-oAOxQR6DkCoMliIh8yFnu25d7Eq/PHS21PClpwjOTeU2jRSq11vu66rf90/cZr47" crossorigin="anonymous">
+	<link rel='stylesheet' href='/static/bundle.css'>
+</head>
+
+<body>
+	<script>
+		(function(){
+			window.pythondo = {{pythondo|tojson}};
+		})()
+	</script>
+	<script src='/static/bundle.js'></script>
+</body>
 </html>
