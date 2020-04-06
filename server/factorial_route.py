@@ -1,6 +1,8 @@
 from app import application
 from flask import request
 
+description = "This page is used to calculate a factorial and returns a number as result"
+
 @application.route("/factorial", methods=["POST"])
 def fuctorial():
         content = request.json
@@ -8,5 +10,5 @@ def fuctorial():
         # IL TUO CODICE PER FARE FATTORIALE
         result = number + number
         return {
-            "cane": result
+            "result": result
         }
