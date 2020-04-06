@@ -4,6 +4,7 @@ import os
 application = Flask(__name__, static_url_path='/static')
 import hello_route
 import index_route
+import test_route
 import factorial_route
 
 if __name__ == "__main__":
