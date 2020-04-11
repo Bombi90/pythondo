@@ -16,12 +16,19 @@ for filename in entries:
              description = "No description Available"
 
         routeName = routeName.replace("_route", "")
+        label = routeName.capitalize()
+        try: 
+            label = module.label
+        except:
+            pass
+                
         urls.append({
             "id": routeName,
             "props": {
                 "methods": ["GET", "POST"],
                 "description": description,
-                "label": routeName.capitalize(),
+                "label": label
+                
             },
             "link": "/" + routeName
         })
