@@ -1,10 +1,8 @@
-import App from './components/App.svelte';
+import App from "./components/App.svelte";
+import store from './state'
 
 const app = new App({
-	target: document.body,
-	props: {
-		urls: window.pythondo.urls
-	}
+  target: document.body,
 });
 
 export default app;

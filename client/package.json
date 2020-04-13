@@ -18,11 +18,12 @@
     "rollup-plugin-svg": "^2.0.0",
     "rollup-plugin-terser": "^4.0.4",
     "sirv-cli": "^0.4.0",
-    "svelte": "^3.0.0"
+    "svelte": "^3.0.0",
+    "quill": "^1.3.7"
   },
   "scripts": {
     "build:svelte": "rollup -c",
-    "clear:assets": "rm -r ./public/assets/*",
+    "clear:assets": "rm -r ./public/assets/* || true",
     "copy": "cp -r ./public/assets/* ../server/static",
     "build": "npm run clear:assets && npm run build:svelte && npm run copy ",
     "autobuild": "rollup -c -w",

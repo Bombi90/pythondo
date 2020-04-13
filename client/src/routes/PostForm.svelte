@@ -1,67 +1,53 @@
 <script>
-  import Loader from "./Loader.svelte";
+  import Loader from "../components/Loader.svelte";
+  import Editor from "../components/JSONEditor.svelte";
+  import { selectStore } from "../utils/Store";
+  let isFetching = false
+  const dispatch = selectStore(
+    ({ fetching: fetchingFromState }) => (isFetching = fetchingFromState),
+    "fetching"
+  );
   export let props;
   let prevLocation;
   let url = `${window.location.origin}${props.location}`;
   let selectedMethod;
   let params = "";
-  let jsonBody = "";
-  let jsonBodyParsed = {};
-  let invalidJSON = false;
   let response;
-  let isFetching = false;
-  function onParamsInput({ target: { value } }) {
-    params = value;
-  }
-  function onJSONInput({ target: { value } }) {
-    try {
-      jsonBodyParsed = JSON.parse(value);
-      jsonBody = value;
-      invalidJSON = false;
-    } catch (e) {
-      invalidJSON = true;
-    }
-  }
+
+  let jsonBody = {};
+
   function handleSubmit() {
-    isFetching = true;
+    console.log("DISPATCHING")
+    dispatch("update_fetching", true)
+
     fetch(`${props.location}${selectedMethod === "GET" ? params : ""}`, {
       method: selectedMethod,
-      ...(selectedMethod !== "GET" &&
-        !invalidJSON && { body: JSON.stringify(jsonBodyParsed) }),
+      ...(selectedMethod !== "GET" && { body: JSON.stringify(jsonBody) }),
       headers: { "Content-Type": "application/json" }
     })
       .then(res => res.json())
       .then(res => {
+        console.log("GOT RESPONSE >> ", {res})
         try {
           response = JSON.stringify(res);
         } catch (e) {
-          response = "Invalid response from Server";
+          response = e;
         }
       })
       .catch(err => {
         response = err.toString();
       })
       .finally(() => {
-        isFetching = false;
+        dispatch("update_fetching", false)
       });
   }
+  $: url = `${window.location.origin}${props.location}`
   $: {
     if (props.location != prevLocation) {
       prevLocation = props.location;
       params = "";
-      jsonBody = "";
-      jsonBodyParsed = {};
-      invalidJSON = false;
       response = undefined;
-      isFetching = false;
-    }
-  }
-  $: {
-    if (selectedMethod === "GET") {
-      jsonBody = "";
-      jsonBodyParsed = {};
-    } else {
-      params = "";
+      dispatch("update_fetching", false)
     }
   }
 </script>
@@ -82,7 +68,6 @@
   .pure-form {
     display: flex;
     justify-content: center;
-    height: 320px;
   }
   fieldset {
     width: 400px;
@@ -96,6 +81,9 @@
   .invalid-json {
     border-color: var(--secondary-text);
   }
+  .editor-container {
+    background: var(--white);
+  }
   .pure-button {
     color: var(--white);
     background-color: var(--terziary-text);
@@ -106,9 +94,9 @@
     margin-top: 20px;
   }
   .response-container {
-    display: flex;
-    justify-content: center;
     height: 200px;
+    width: 400px;
+    margin: auto;
   }
   .response-container textarea {
     height: 200px;
@@ -132,7 +120,7 @@
     <fieldset>
       <div class="pure-control-group">
         <label>Url</label>
-        <input class="pure-input-1" readonly type="text" value={url} />
+        <input class="pure-input-1" readonly type="text" bind:value={url} />
       </div>
       <div class="pure-control-group">
         <label for="state">Method</label>
@@ -143,14 +131,8 @@
         </select>
       </div>
       {#if ['POST', 'PUT', 'PATCH'].includes(selectedMethod)}
-        <div class="pure-control-group">
-          <label for="json-body">JSON Body</label>
-          <textarea
-            id="json-body"
-            class="pure-input-1 {invalidJSON ? 'invalid-json' : ''}"
-            value={jsonBody}
-            on:input={onJSONInput}
-            placeholder="Request Body goes here" />
+        <div class="pure-control-group editor-container">
+          <Editor on:json-changed={ ({detail}) => jsonBody = detail } />
         </div>
       {/if}
       {#if ['GET'].includes(selectedMethod)}
@@ -159,8 +141,7 @@
           <input
             id="params"
             type="text"
-            value={params}
-            on:input={onParamsInput}
+            bind:value={params}
             class="pure-input-1"
             placeholder="?key=KEY" />
         </div>
@@ -172,13 +153,7 @@
     </fieldset>
   </form>
   <div class="response-container">
-    <textarea
-      tabindex="-1"
-      id="response"
-      value={response || ''}
-      class="pure-input-1"
-      readonly
-      placeholder="Response Body goes here" />
+      <Editor readOnlyValue={response} readOnly="true" />
   </div>
 </div>
 {#if isFetching}

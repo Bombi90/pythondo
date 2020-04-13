@@ -1,10 +1,9 @@
 <script>
-export let urls
 import Navigation from './Navigation.svelte';
 import Footer from './Footer.svelte';
 </script>
     <div class="pythondo pure-g">
-        <Navigation urls={urls} />
+        <Navigation />
         <Footer />
     </div>
 <style>

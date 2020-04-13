@@ -1,16 +1,13 @@
 <script>
-  export let urls;
-  import PostForm from "./PostForm.svelte";
-  import Home from "./Home.svelte";
   import Link from "./Link.svelte";
   import Router from "../utils/Router.svelte";
-  let routes = new Map();
-  function routeLoaded(event) {}
-  [{ link: "/", component: Home, props: { label: "Home" } }, ...urls].forEach(
-    ({ link, component, props }) => {
-      routes.set(link, { props, component: component || PostForm });
-    }
+  import { selectStore } from "../utils/Store";
+  let routes;
+  const dispatch = selectStore(
+    ({ routes: routesFromState }) => (routes = routesFromState),
+    "routes"
   );
+  function routeLoaded(event) {}
 </script>
 
 <style>

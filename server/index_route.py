@@ -39,4 +39,4 @@ def index():
     pythondo = {
         "urls": urls
     }
-    return render_template('index.html', pythondo=pythondo)
+    return render_template('index.jinja2', pythondo=pythondo)

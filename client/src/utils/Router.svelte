@@ -1,5 +1,5 @@
 <script context="module">
-import {readable, derived} from 'svelte/store'
+import {readable} from 'svelte/store'
 
 export function link(node) {
     const href = node.getAttribute('href')

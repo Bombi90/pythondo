@@ -8,7 +8,9 @@ def hello():
     if request.method == 'POST':
             content = request.json
             data = content['data']
-            return data
+            return {
+                    "data": data
+            }
     else:
             searchword = request.args.get('key', '')
             return {
