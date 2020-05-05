@@ -8,6 +8,8 @@ import factorial_route
 import uppercase_route
 import odd_route
 import letterscount_route
+import blackjack_route
+import speedlimit_route
 
 if __name__ == "__main__":
     application.run(host="0.0.0.0", port=int(os.getenv("PORT")))
