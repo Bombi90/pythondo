@@ -10,20 +10,21 @@ def speedlimit():
         content = request.json
         speed = content['speed']
         overlimit = speed - 120
+        speed_calc = speed/60
         fine = ''
         
-        if speed/60 <= 2:
+        if speed_calc <= 2:
             return {
             "result": "You are safe. Your speed is {} km/h" .format(speed)
             }
         
-        elif speed/60 > 2 and speed/60 <= 2.5:
+        elif speed_calc > 2 and speed_calc <= 2.5:
             fine = speed * 2
             return {
                 "result": "You've got a {}$ fine because of your {} km/h speed, {} over the limit of 120 km/h" .format(fine,speed,overlimit)
             }
         
-        elif speed/60 > 2.5 and speed/60 <= 3:
+        elif speed_calc > 2.5 and speed_calc <= 3:
             fine = speed * 3
             return {
                 "result": "You've got a {}$ fine because of your {} km/h speed, {} over the limit of 120 km/h" .format(fine,speed,overlimit)

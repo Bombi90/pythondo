@@ -14,14 +14,15 @@ def blackjack():
         a = data['a']
         b = data ['b']
         c = data ['c']
+        score = a+b+c
     
-        if sum((a,b,c)) <= 21:
+        if score <= 21:
             return {
-            "result": sum((a,b,c))
+            "result": score
             }
-        elif sum((a,b,c)) <=31 and 11 in (a,b,c):
+        elif score <=31 and 11 in (a,b,c):
             return {
-            "result": sum((a,b,c)) - 10
+            "result": score - 10
             }
         else:
             return {
