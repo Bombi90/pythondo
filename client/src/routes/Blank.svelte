@@ -1,6 +1,7 @@
 <script>
-  import { onMount } from "svelte";
+  import { onMount, onDestroy } from "svelte";
   export let props;
+  let observer = null
   onMount(async () => {
     const data = await fetch(props.location);
     const { html } = await data.json();
@@ -10,21 +11,23 @@
       // Use traditional 'for loops' for IE 11
       for (let mutation of mutationsList) {
         if (mutation.type === "childList") {
-                   const script = targetNode.querySelector("script");
-          eval(script.innerText);
-        } else if (mutation.type === "attributes") {
           const script = targetNode.querySelector("script");
           eval(script.innerText);
         }
       }
     };
     // Create an observer instance linked to the callback function
-    const observer = new MutationObserver(callback);
+    observer = new MutationObserver(callback);
 
     // Start observing the target node for configured mutations
     observer.observe(targetNode, config);
     targetNode.innerHTML = html;
   });
+  onDestroy(() => {
+      if (observer) {
+          observer.disconnect();
+      }
+  })
 </script>
 
 <style>
