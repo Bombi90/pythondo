@@ -15,6 +15,12 @@ for filename in entries:
         except:
              description = "No description Available"
 
+        is_blank_page = False
+        try:
+            is_blank_page = module.is_blank_page
+        except:
+             is_blank_page = False
+
         routeName = routeName.replace("_route", "")
         label = routeName.capitalize()
         try: 
@@ -30,6 +36,7 @@ for filename in entries:
                 "label": label
                 
             },
+            "isBlank": is_blank_page,
             "link": "/" + routeName
         })
 
