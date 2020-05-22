@@ -8,7 +8,7 @@ is_blank_page = True
 def get_script(board_state):
         return f"""
                 <script type="application/json">
-                eval(`(function(){{
+                (function(){{
                 const player_one_input = document.getElementById("player-one-input");
                 const player_two_input =document.getElementById("player-two-input");
                 const player_one_button = document.getElementById("player-one-button");
@@ -43,7 +43,7 @@ def get_script(board_state):
                 restart_button.addEventListener("click", async event => {{
                     await get()
                  }})
-                }})()`)
+                }})()
                 </script>
                 """
 
