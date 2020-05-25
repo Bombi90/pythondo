@@ -1,5 +1,5 @@
-#Simulatore di Tornei a 4 squadre - Versione 0.5
-# Modifiche: aggiunte partite giocate ed evitati incroci
+#Simulatore di Tornei a 4 squadre - Versione 0.7
+# Modifiche: Semplificando sistema di partite
 
 import random
 
@@ -19,28 +19,32 @@ torneo = {
             'punti' : 0,
             'partite' : 0,
             'gol_fatti' : 0,
-            'gol_subiti' : 0
+            'gol_subiti' : 0,
+            'differenza_reti' : 0
         },
         {
             'nome' : input('Scegli il nome della seconda squadra '),
             'punti': 0,
             'partite': 0,
             'gol_fatti' : 0,
-            'gol_subiti' : 0
+            'gol_subiti' : 0,
+            'differenza_reti' : 0
         },
         {
             'nome' : input('Scegli il nome della terza squadra '),
             'punti' : 0,
             'partite' : 0,
             'gol_fatti' : 0,
-            'gol_subiti' : 0
+            'gol_subiti' : 0,
+            'differenza_reti' :0
         },
         {
             'nome' : input('Scegli il nome della quarta squadra '),
             'punti': 0,
             'partite' : 0,
             'gol_fatti' : 0,
-            'gol_subiti' : 0
+            'gol_subiti' : 0,
+            'differenza_reti' : 0
         }
     ]
     
@@ -70,35 +74,34 @@ while game_on:
     
     #Giornata
     print('Giornata '+ str(p))      
+
     
     #Creo una lista con i soli nomi delle squadre con il ciclo for
     squadre_random = []
     for k in range(0,4):
         squadre_random.append(torneo['squadre'][k]['nome'])
+    
+    
+    #### NUOVE CONDIZIONI PER I SORTEGGI
+    
+    
+    #Nuove variabili per le partite e i gol
+    new_partite = [squadre_random[random.randint(0,3)], squadre_random[random.randint(0,3)], squadre_random[random.randint(0,3)], squadre_random[random.randint(0,3)], ]
+    new_goals = [random.randint(0,4), random.randint(0,4), random.randint(0,4), random.randint(0,4)]
 
-    #Setto le due partite
-    partita1 = [squadre_random[random.randint(0,3)], squadre_random[random.randint(0,3)]]
-    partita2 = [squadre_random[random.randint(0,3)], squadre_random[random.randint(0,3)]]            
-
-    #Verifico che non ci siano nè squadre uguali nè partite uguali
-    while partita1[0] == partita1[1] or partita1[0] == partita2[0] or partita1[0] == partita2[1] or partita1[1] == partita2[0] or partita1[1] == partita2[1] or partita2[0] == partita2[1] or partita1 == partita2:
-        partita1 = [squadre_random[random.randint(0,3)], squadre_random[random.randint(0,3)]]
-        partita2 = [squadre_random[random.randint(0,3)], squadre_random[random.randint(0,3)]]
-        #Verifico che le squadre non abbiano già giocato contro
-        while partita1[0]+' - '+partita1[1] in partite_giocate or partita2[0]+' - '+partita2[1] in partite_giocate or partita1[1]+' - '+partita1[0] in partite_giocate or partita2[1]+' - '+partita2[0] in partite_giocate:
-            partita1 = [squadre_random[random.randint(0,3)], squadre_random[random.randint(0,3)]]
-            partita2 = [squadre_random[random.randint(0,3)], squadre_random[random.randint(0,3)]]
-            
+    #Verifico che non siano state sorteggiate squadre uguali nè partite uguali
+    while len(new_partite) > len(set(new_partite)):
+            new_partite = [squadre_random[random.randint(0,3)], squadre_random[random.randint(0,3)], squadre_random[random.randint(0,3)], squadre_random[random.randint(0,3)], ]
+            while new_partite[0]+' - '+new_partite[1] in partite_giocate or new_partite[1]+' - '+new_partite[0] in partite_giocate or new_partite[2]+' - '+new_partite[3] in partite_giocate or new_partite[3]+' - '+new_partite[2] in partite_giocate:
+                new_partite = [squadre_random[random.randint(0,3)], squadre_random[random.randint(0,3)], squadre_random[random.randint(0,3)], squadre_random[random.randint(0,3)], ]
+    
     #Aggiorno la lista vuota delle partite giocate
-    partite_giocate.append(partita1[0]+' - '+partita1[1])
-    partite_giocate.append(partita2[0]+' - '+partita2[1])
-
+    partite_giornata = [new_partite[0]+' - '+new_partite[1], new_partite[2]+' - '+new_partite[3]]
+    partite_giocate.extend(partite_giornata)
+    
     #Partite della giornata
-    partita1_play = partita1[0]+' - '+partita1[1]
-    partita2_play = partita2[0]+' - '+partita2[1]
-    print(partita1_play)
-    print(partita2_play)        
-
+    print('Partite della giornata: \n'+partite_giornata[0]+'\n'+partite_giornata[1])
+    
     #Inizio della giornata da far scegliere all'utente
     play_match = input('Simulare la giornata numero '+str(p)+'? Digita S per Si, N per NO (S/N)')
     if play_match.lower() == 's':
@@ -109,85 +112,53 @@ while game_on:
     if not match:
         game_on = False
         print('Il torneo è incompleto, ma '+ty_message.lower())
-
+        
     else:
-        #Gol delle squadre
-        partita1_goals = [random.randint(0,4), random.randint(0,4)]
-        partita2_goals = [random.randint(0,4), random.randint(0,4)]
-
         #Risultati delle partite
-        partita1_end = partita1_play+' '+str(partita1_goals[0])+' - '+str(partita1_goals[1])
-        partita2_end = partita2_play+' '+str(partita2_goals[0])+' - '+str(partita2_goals[1])
+        partite_end = [partite_giornata[0]+' '+str(new_goals[0])+' - '+str(new_goals[1]), partite_giornata[1]+' '+str(new_goals[2])+' - '+str(new_goals[3])]
 
         #Stampo i risultati delle partite
-        print(partita1_end)
-        print(partita2_end)
-
-
+        print('Risultati della giornata: \n'+partite_end[0]+'\n'+partite_end[1])
+        
         #Assegno le partite giocare
         for x in range(0,4):
             torneo['squadre'][x]['partite'] = torneo['squadre'][x]['partite']+1
-
-        #Condizioni per assegnare i punti e i gol
-        for m in range(0,2):
-
+            
+        #Condizioni per assegnare i punti, i gol e la differenza reti
+        for m in range(0,4):
             for n in range(0,4):
-
                 if m == 0:
                     o = 1
-                else:
+                elif m == 1:
                     o = 0
+                elif m == 2:
+                    o = 3
+                else:
+                    o = 2
 
-                #Assegno i punti alle squadre
-                if partita1[m] == torneo['squadre'][n]['nome']:
-
-                    if partita1_goals[m] > partita1_goals[o]:
+                if new_partite[m] == torneo['squadre'][n]['nome']:
+                    
+                    #Assegno i gol alle squadre
+                    torneo['squadre'][n]['gol_fatti'] = torneo['squadre'][n]['gol_fatti'] + new_goals[m]
+                    torneo['squadre'][n]['gol_subiti'] = torneo['squadre'][n]['gol_subiti'] + new_goals[o]
+                    
+                    #Assegno la differenza reti
+                    torneo['squadre'][n]['differenza_reti'] = torneo['squadre'][n]['gol_fatti'] - torneo['squadre'][n]['gol_subiti']
+                    
+                    #Assegno i punti alle squadre
+                    if new_goals[m] > new_goals[o]:
                         torneo['squadre'][n]['punti'] = torneo['squadre'][n]['punti']+3
 
-                    elif partita1_goals[m] == partita1_goals[o]:
+                    elif new_goals[m] == new_goals[o]:
                         torneo['squadre'][n]['punti'] = torneo['squadre'][n]['punti']+1
-
-                    elif partita1_goals[m] < partita1_goals[o]:
-                        torneo['squadre'][n]['punti'] = torneo['squadre'][n]['punti']+0
 
                     else:
                         pass
-
-
-                if partita2[m] == torneo['squadre'][n]['nome']:
-
-                    if partita2_goals[m] > partita2_goals[o]:
-                        torneo['squadre'][n]['punti'] = torneo['squadre'][n]['punti']+3
-
-                    elif partita2_goals[m] == partita2_goals[o]:
-                        torneo['squadre'][n]['punti'] = torneo['squadre'][n]['punti']+1
-
-                    elif partita2_goals[m] < partita2_goals[o]:
-                        torneo['squadre'][n]['punti'] = torneo['squadre'][n]['punti']+0
-
-                    else:
-                        pass
-
-
-                #Assegno i gol alle squadre
-                if partita1[m] == torneo['squadre'][n]['nome']:
-                    torneo['squadre'][n]['gol_fatti'] = torneo['squadre'][n]['gol_fatti'] + partita1_goals[m]
-                    torneo['squadre'][n]['gol_subiti'] = torneo['squadre'][n]['gol_subiti'] + partita1_goals[o]
-
-                else:
-                    pass
-
-
-                if partita2[m] == torneo['squadre'][n]['nome']:
-                    torneo['squadre'][n]['gol_fatti'] = torneo['squadre'][n]['gol_fatti'] + partita2_goals[m]
-                    torneo['squadre'][n]['gol_subiti'] = torneo['squadre'][n]['gol_subiti'] + partita2_goals[o]
-
-                else:
-                    pass
-
-
-
-
+    
+    
+    ### FINE NUOVE CONDIZIONI PER I SORTEGGI
+    
+   
         #Titolo classifica
         if torneo['squadre'][0]['partite'] == 3:
             print('Classifica finale')
@@ -203,8 +174,9 @@ while game_on:
             partite_squadra = torneo['squadre'][i]['partite']
             fatti_squadra = torneo['squadre'][i]['gol_fatti']
             subiti_squadra = torneo['squadre'][i]['gol_subiti']
+            diff_reti = torneo['squadre'][i]['differenza_reti']
 
-            print(nome_squadra+' '+str(punti_squadra)+' punti in '+str(partite_squadra)+' partite con '+str(fatti_squadra)+' gol fatti e '+str(subiti_squadra)+' gol subiti')
+            print(nome_squadra+' '+str(punti_squadra)+' punti in '+str(partite_squadra)+' partite con '+str(fatti_squadra)+' gol fatti e '+str(subiti_squadra)+' gol subiti e differenza reti di '+"%+d" % (diff_reti))
             
 
         #Aumento il numero della giornata
@@ -295,7 +267,7 @@ while game_on:
                 
 
 ### PROSSIME FUNZIONI DA IMPLEMENTARE ###
-#Spareggio se una o più squadre sono a pari punti - iniziato da finire
-#Differenza reti
+#Spareggio se una o più squadre sono a pari punti - FATTO solo per pari merito di 2 squadre
+#Differenza reti - FATTO
 #Numero di squadre definito dall'utente (4 o 8 o 16 max)
 #Gironi + Eliminazione diretta?
