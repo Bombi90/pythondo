@@ -28,12 +28,13 @@ def get_script(board_state):
                    const data = await response.json()
                    document.getElementById("pythondo-app-container").innerHTML = data.html
                  }}
+
                 const get = async (turn, board, position) => {{ 
                    const response = await fetch("/tictactoe", {{
                         headers: {{ "Content-Type": "application/json" }},
                     }})
-                   const data = await response.json()
-                   document.getElementById("pythondo-app-container").innerHTML = data.html
+                   const {{ html }} = await response.json()
+                   document.getElementById("pythondo-app-container").innerHTML = html
                  }}
 
                  if(player_one_button) {{
@@ -70,7 +71,7 @@ def display_board(board, message, turn):
                 <h1>Tic-Tac-Toe</h1>
                 <h3>{message}</h3>
                 <div>
-                    { '<button id="pick-random-player">Begin</button></p>' if turn == "Start" else ''}
+                    {'<button id="pick-random-player">Begin</button></p>' if turn == "Start" else ''}
                     {'<p>Player 1 is <strong>X</strong> <input id="player-one-input" /> <button id="player-one-button">Submit</button></p>' if turn == 'Player 1' else ''}
                     {'<p>Player 2 is <strong>O</strong> <input id="player-two-input" /> <button id="player-two-button">Submit</button></p>' if turn == 'Player 2' else ''} 
                     <p><button id="restart-button" >Restart</button></p>

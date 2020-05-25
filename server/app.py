@@ -10,6 +10,7 @@ import odd_route
 import letterscount_route
 import blackjack_route
 import speedlimit_route
+import example_blank_route
 
 if __name__ == "__main__":
     application.run(host="0.0.0.0", port=int(os.getenv("PORT")))
